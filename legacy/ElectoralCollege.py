@@ -1,5 +1,6 @@
 from enum import Enum
 
+
 class State(Enum):
     AL = "Alabama"
     AK = "Alaska"
@@ -53,13 +54,14 @@ class State(Enum):
     WI = "Wisconsin"
     WY = "Wyoming"
 
+
 class Party(Enum):
     DEM = "Democrat"
     REP = "Republican"
-    # no point of these parties 
+    # no point of these parties
     # but added for completeness
-    IND =  "Independent" 
-    GRE ="Green"
+    IND = "Independent"
+    GRE = "Green"
     LIB = "Liberaterian"
 
 
@@ -120,9 +122,9 @@ class ElectoralCollege:
             State.WA: 12,
             State.WV: 4,
             State.WI: 10,
-            State.WY: 3
+            State.WY: 3,
         }
-        
+
         # calculate total electoral votes (538)
         self.total_electoral_votes = sum(self.electoral_votes.values())
 
@@ -143,7 +145,6 @@ class ElectoralCollege:
 
         return results
 
-
     def check_winner(self, state_results):
         results = self.calculate_electoral_votes(state_results=state_results)
 
@@ -153,23 +154,21 @@ class ElectoralCollege:
         return False, None
 
     def get_remaining_paths(self, current_results, uncalled_states):
-        
         current_totals = self.calculate_electoral_votes(current_results)
         remaining_votes = sum(self.electoral_votes[state] for state in uncalled_states)
-        
+
         paths = {}
         for party, current_votes in current_totals.items():
             needed_votes = self.votes_to_win - current_votes
             paths[party] = {
-                'current_votes': current_votes,
-                'needed_votes': needed_votes,
-                'possible': needed_votes <= remaining_votes
+                "current_votes": current_votes,
+                "needed_votes": needed_votes,
+                "possible": needed_votes <= remaining_votes,
             }
         return paths
 
 
 if __name__ == "__main__":
-
     # create instance
     ec = ElectoralCollege()
 
@@ -185,7 +184,6 @@ if __name__ == "__main__":
         State.NJ: None,  # New Jersey
         State.NY: None,  # New York
         State.PA: None,  # Pennsylvania
-        
         # Midwest
         State.IL: Party.DEM,  # Illinois
         State.IN: Party.REP,  # Indiana
@@ -199,7 +197,6 @@ if __name__ == "__main__":
         State.NE: None,  # Nebraska
         State.ND: Party.REP,  # North Dakota
         State.SD: Party.REP,  # South Dakota
-        
         # South
         State.DE: Party.DEM,  # Delaware
         State.FL: Party.REP,  # Florida
@@ -217,7 +214,6 @@ if __name__ == "__main__":
         State.LA: Party.REP,  # Louisiana
         State.OK: Party.REP,  # Oklahoma
         State.TX: Party.REP,  # Texas
-        
         # West
         State.AZ: None,  # Arizona
         State.CO: Party.DEM,  # Colorado
@@ -232,7 +228,6 @@ if __name__ == "__main__":
         State.HI: None,  # Hawaii
         State.OR: None,  # Oregon
         State.WA: None,  # Washington
-        
         # District of Columbia
         State.DC: Party.DEM,  # District of Columbia
     }
@@ -244,8 +239,8 @@ if __name__ == "__main__":
     has_winner, winner = ec.check_winner(test_results)
 
     # check uncalled states for remaining paths to victory
-    test_uncalled_states = [state for state, result in test_results.items() if result is None]
+    test_uncalled_states = [
+        state for state, result in test_results.items() if result is None
+    ]
     remaining_paths = ec.get_remaining_paths(test_results, test_uncalled_states)
     print("\nPaths to victory:", remaining_paths)
-
-

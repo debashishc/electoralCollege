@@ -8,7 +8,7 @@ from enums import State, Party
 class StateInfo:
     """
     Contains detailed information about a state's electoral properties.
-    
+
     Attributes:
         name: Full name of the state
         electoral_votes: Number of electoral votes
@@ -16,6 +16,7 @@ class StateInfo:
         is_split_vote: Whether state can split electoral votes
         region: Geographic region of the state
     """
+
     name: str
     electoral_votes: int
     congressional_districts: int
@@ -27,7 +28,7 @@ class StateInfo:
 class ElectionResult:
     """
     Stores the results and analysis of an election calculation.
-    
+
     Attributes:
         year: Election year
         state_results: Mapping of states to winning parties
@@ -37,6 +38,7 @@ class ElectionResult:
         timestamp: When the result was calculated
         notes: Additional information about the result
     """
+
     year: int
     state_results: Dict[State, Optional[Party]]
     vote_totals: Dict[Party, int]

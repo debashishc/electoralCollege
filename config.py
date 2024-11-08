@@ -7,8 +7,7 @@ from enums import State, Party
 
 
 logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 )
 
 logger = logging.getLogger(__name__)
@@ -18,18 +17,21 @@ TOTAL_ELECTORAL_VOTES: Final[int] = 538
 VOTES_TO_WIN: Final[int] = 270
 MIN_STATE_VOTES: Final[int] = 3
 
+
 class Region(Enum):
     """Enumeration of US geographic regions"""
+
     NORTHEAST = "Northeast"
     MIDWEST = "Midwest"
     SOUTH = "South"
     WEST = "West"
     DISTRICT = "District"
 
+
 class ElectoralConfig:
     """Configuration for the Electoral College system."""
-    
-    STATE_DATA: Final[Dict[State, StateInfo]] = { 
+
+    STATE_DATA: Final[Dict[State, StateInfo]] = {
         # Northeast Region
         State.ME: StateInfo("Maine", 4, 2, True, Region.NORTHEAST.value),
         State.NH: StateInfo("New Hampshire", 4, 1, False, Region.NORTHEAST.value),
@@ -40,7 +42,6 @@ class ElectoralConfig:
         State.NY: StateInfo("New York", 28, 26, False, Region.NORTHEAST.value),
         State.NJ: StateInfo("New Jersey", 14, 12, False, Region.NORTHEAST.value),
         State.PA: StateInfo("Pennsylvania", 19, 17, False, Region.NORTHEAST.value),
-
         # Midwest Region
         State.OH: StateInfo("Ohio", 17, 15, False, Region.MIDWEST.value),
         State.IN: StateInfo("Indiana", 11, 9, False, Region.MIDWEST.value),
@@ -54,7 +55,6 @@ class ElectoralConfig:
         State.SD: StateInfo("South Dakota", 3, 1, False, Region.MIDWEST.value),
         State.NE: StateInfo("Nebraska", 5, 3, True, Region.MIDWEST.value),
         State.KS: StateInfo("Kansas", 6, 4, False, Region.MIDWEST.value),
-
         # South Region
         State.DE: StateInfo("Delaware", 3, 1, False, Region.SOUTH.value),
         State.MD: StateInfo("Maryland", 10, 8, False, Region.SOUTH.value),
@@ -72,7 +72,6 @@ class ElectoralConfig:
         State.LA: StateInfo("Louisiana", 8, 6, False, Region.SOUTH.value),
         State.OK: StateInfo("Oklahoma", 7, 5, False, Region.SOUTH.value),
         State.TX: StateInfo("Texas", 40, 38, False, Region.SOUTH.value),
-
         # West Region
         State.MT: StateInfo("Montana", 4, 2, False, Region.WEST.value),
         State.ID: StateInfo("Idaho", 4, 2, False, Region.WEST.value),
@@ -87,43 +86,96 @@ class ElectoralConfig:
         State.CA: StateInfo("California", 54, 52, False, Region.WEST.value),
         State.AK: StateInfo("Alaska", 3, 1, False, Region.WEST.value),
         State.HI: StateInfo("Hawaii", 4, 2, False, Region.WEST.value),
-
         # District of Columbia
         State.DC: StateInfo("District of Columbia", 3, 1, False, Region.DISTRICT.value)
         # State.PR -- nope, Puerto Rico can't vote, aaargh
     }
-    
+
     REGIONS: Final[Dict[Region, List[str]]] = {
         Region.NORTHEAST: ["ME", "NH", "VT", "MA", "RI", "CT", "NY", "NJ", "PA"],
-        Region.MIDWEST: ["OH", "IN", "IL", "MI", "WI", "MN", "IA", "MO", "ND", "SD", "NE", "KS"],
-        Region.SOUTH: ["DE", "MD", "VA", "WV", "NC", "SC", "GA", "FL", "KY", "TN", "AL", "MS", "AR", "LA", "OK", "TX"],
-        Region.WEST: ["MT", "ID", "WY", "CO", "NM", "AZ", "UT", "NV", "WA", "OR", "CA", "AK", "HI"],
-        Region.DISTRICT: ["DC"]
+        Region.MIDWEST: [
+            "OH",
+            "IN",
+            "IL",
+            "MI",
+            "WI",
+            "MN",
+            "IA",
+            "MO",
+            "ND",
+            "SD",
+            "NE",
+            "KS",
+        ],
+        Region.SOUTH: [
+            "DE",
+            "MD",
+            "VA",
+            "WV",
+            "NC",
+            "SC",
+            "GA",
+            "FL",
+            "KY",
+            "TN",
+            "AL",
+            "MS",
+            "AR",
+            "LA",
+            "OK",
+            "TX",
+        ],
+        Region.WEST: [
+            "MT",
+            "ID",
+            "WY",
+            "CO",
+            "NM",
+            "AZ",
+            "UT",
+            "NV",
+            "WA",
+            "OR",
+            "CA",
+            "AK",
+            "HI",
+        ],
+        Region.DISTRICT: ["DC"],
     }
-    
+
     # Electoral vote calculations
     TOTAL_ELECTORAL_VOTES: Final[int] = TOTAL_ELECTORAL_VOTES
     VOTES_TO_WIN: Final[int] = VOTES_TO_WIN
-    
+
     # Special state classifications
     SPLIT_VOTE_STATES: Final[Set[str]] = {"ME", "NE"}  # Using set for O(1) lookup
     SWING_STATES: Final[Set[str]] = {"AZ", "GA", "MI", "NV", "PA", "WI"}
-    
+
     # Historical electoral patterns
-    HISTORICALLY_DEMOCRATIC: Final[Set[str]] = {"CA", "NY", "IL", "MA"}  # Example states
-    HISTORICALLY_REPUBLICAN: Final[Set[str]] = {"TX", "WY", "ID", "UT"}  # Example states
-    
+    HISTORICALLY_DEMOCRATIC: Final[Set[str]] = {
+        "CA",
+        "NY",
+        "IL",
+        "MA",
+    }  # Example states
+    HISTORICALLY_REPUBLICAN: Final[Set[str]] = {
+        "TX",
+        "WY",
+        "ID",
+        "UT",
+    }  # Example states
+
     @classmethod
     def get_region(cls, state: State) -> str:
         """
         Get the region for a given state.
-        
+
         Args:
             state: State enum value
-            
+
         Returns:
             Region name as string
-            
+
         Raises:
             KeyError: If state not found in configuration
         """
@@ -137,10 +189,10 @@ class ElectoralConfig:
     def get_states_in_region(cls, region: Region) -> List[State]:
         """
         Get all states in a given region.
-        
+
         Args:
             region: Region enum value
-            
+
         Returns:
             List of states in the region
         """
@@ -150,10 +202,10 @@ class ElectoralConfig:
     def is_swing_state(cls, state: State) -> bool:
         """
         Check if a state is considered a swing state.
-        
+
         Args:
             state: State to check
-            
+
         Returns:
             True if swing state, False otherwise
         """
@@ -163,10 +215,10 @@ class ElectoralConfig:
     def get_historical_leaning(cls, state: State) -> Optional[Party]:
         """
         Get historical voting pattern of a state.
-        
+
         Args:
             state: State to check
-            
+
         Returns:
             Party that historically wins the state, or None if competitive
         """
@@ -180,12 +232,12 @@ class ElectoralConfig:
     def validate_configuration(cls) -> bool:
         """
         Validate the electoral configuration.
-        
+
         Performs comprehensive validation of the configuration data.
-        
+
         Returns:
             True if configuration is valid, False otherwise
-        
+
         Logs detailed error messages for any validation failures.
         """
         try:
@@ -195,11 +247,11 @@ class ElectoralConfig:
                     f"Total electoral votes must be {TOTAL_ELECTORAL_VOTES}, "
                     f"got {cls.TOTAL_ELECTORAL_VOTES}"
                 )
-            
+
             # Validate state data
             all_states = set(State)
             configured_states = set(cls.STATE_DATA.keys())
-            
+
             # Check for missing or extra states
             if all_states != configured_states:
                 missing = all_states - configured_states
@@ -209,7 +261,7 @@ class ElectoralConfig:
                 if extra:
                     logger.error(f"Extra states: {extra}")
                 raise ValueError("State configuration mismatch")
-            
+
             # Validate each state's data
             for state, info in cls.STATE_DATA.items():
                 # Check minimum electoral votes
@@ -217,23 +269,22 @@ class ElectoralConfig:
                     raise ValueError(
                         f"{state.name} has less than {MIN_STATE_VOTES} electoral votes"
                     )
-                
+
                 # Validate congressional districts
                 if info.electoral_votes != info.congressional_districts + 2:
                     raise ValueError(
                         f"{state.name} congressional districts don't match electoral votes"
                     )
-                
+
                 # Validate region assignment
                 if not info.region or not any(
-                    state.name in states 
-                    for states in cls.REGIONS.values()
+                    state.name in states for states in cls.REGIONS.values()
                 ):
                     raise ValueError(f"{state.name} not properly assigned to a region")
-            
+
             logger.info("Configuration validation successful")
             return True
-            
+
         except Exception as e:
             logger.error(f"Configuration validation failed: {str(e)}")
             return False
@@ -242,23 +293,19 @@ class ElectoralConfig:
     def get_region_summary(cls, region: Region) -> dict:
         """
         Get summary statistics for a region.
-        
+
         Args:
             region: Region to summarize
-            
+
         Returns:
             Dictionary containing regional statistics
         """
         states = cls.get_states_in_region(region)
         return {
-            'name': region.value,
-            'states': len(states),
-            'electoral_votes': sum(
-                cls.STATE_DATA[state].electoral_votes 
-                for state in states
+            "name": region.value,
+            "states": len(states),
+            "electoral_votes": sum(
+                cls.STATE_DATA[state].electoral_votes for state in states
             ),
-            'swing_states': sum(
-                1 for state in states 
-                if cls.is_swing_state(state)
-            )
+            "swing_states": sum(1 for state in states if cls.is_swing_state(state)),
         }
