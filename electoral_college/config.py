@@ -1,9 +1,9 @@
 from enum import Enum
 from typing import Dict, List, Final, Set, Optional
 from dataclasses import dataclass
-from models import StateInfo
+from electoral_college.models import StateInfo
 import logging
-from enums import State, Party
+from electoral_college.enums import State, Party
 
 
 logging.basicConfig(

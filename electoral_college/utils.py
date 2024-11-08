@@ -1,5 +1,5 @@
 from typing import Dict, Optional
-from enums import State, Party
+from electoral_college.enums import State, Party
 
 
 def get_state_votes(electoral_votes: Dict[State, int], state: State) -> int:

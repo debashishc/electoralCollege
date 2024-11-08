@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Dict, Optional, Set
 from datetime import datetime
-from enums import State, Party
+from electoral_college.enums import State, Party
 
 
 @dataclass
